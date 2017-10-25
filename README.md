@@ -1,0 +1,2 @@
+# FullNameGenerator
+Генератор случайных ФИО
