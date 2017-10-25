@@ -1,5 +1,6 @@
 import generator.Generator;
 import generator.Transliterator;
+import generator.UserAccount;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -18,7 +19,7 @@ public class GeneratorTest
 {
     private int GENERATOR_SIZE = 10;
     private Generator generator;
-    Map<Integer, String> map;
+    Map<Integer, UserAccount> map;
 
     @Before
     public void init()
@@ -36,13 +37,24 @@ public class GeneratorTest
     @Test
     public void checkingTheOutputOfCyrillicAlphabet()
     {
-        map.forEach((k,v) -> assertTrue(Pattern.matches(".*\\p{InCyrillic}.*", v)));
+        map.forEach((k,v) ->
+        {
+            assertTrue(Pattern.matches(".*\\p{InCyrillic}.*", v.getFirstName()));
+            assertTrue(Pattern.matches(".*\\p{InCyrillic}.*", v.getLastName()));
+            assertTrue(Pattern.matches(".*\\p{InCyrillic}.*", v.getPatronymic()));
+        });
     }
 
     @Test
     public void checkingTheLatinOutput()
     {
-        generator.generateMap(true).forEach((k,v) -> assertFalse(Pattern.matches(".*\\p{InCyrillic}.*", v)));
+        generator.generateMap(true).forEach((k,v) ->
+                {
+                    assertFalse(Pattern.matches(".*\\p{InCyrillic}.*", v.getFirstName()));
+                    assertFalse(Pattern.matches(".*\\p{InCyrillic}.*", v.getLastName()));
+                    assertFalse(Pattern.matches(".*\\p{InCyrillic}.*", v.getPatronymic()));
+                }
+        );
     }
 
     @Test

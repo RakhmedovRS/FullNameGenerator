@@ -36,9 +36,16 @@ class FullNameDataHandler implements AutoCloseable
      *
      * @return рандомное имя
      */
-    private String getFirstName()
+    public String getFirstName(boolean needTransliterate)
     {
-        return firstNames.get(random.nextInt(firstNames.size()));
+        if (needTransliterate)
+        {
+            return Transliterator.transliterate(firstNames.get(random.nextInt(firstNames.size())));
+        }
+        else
+        {
+            return firstNames.get(random.nextInt(firstNames.size()));
+        }
     }
 
     /**
@@ -46,9 +53,16 @@ class FullNameDataHandler implements AutoCloseable
      *
      * @return рандомная фамилия
      */
-    private String getLastName()
+    public String getLastName(boolean needTransliterate)
     {
-        return lastNames.get(random.nextInt(lastNames.size()));
+        if (needTransliterate)
+        {
+            return Transliterator.transliterate(lastNames.get(random.nextInt(lastNames.size())));
+        }
+        else
+        {
+            return lastNames.get(random.nextInt(lastNames.size()));
+        }
     }
 
     /**
@@ -56,9 +70,16 @@ class FullNameDataHandler implements AutoCloseable
      *
      * @return рандомное отчество
      */
-    private String getPatronymics()
+    public String getPatronymic(boolean needTransliterate)
     {
-        return patronymics.get(random.nextInt(patronymics.size()));
+        if (needTransliterate)
+        {
+            return Transliterator.transliterate(patronymics.get(random.nextInt(patronymics.size())));
+        }
+        else
+        {
+            return patronymics.get(random.nextInt(patronymics.size()));
+        }
     }
 
     /**
@@ -69,7 +90,7 @@ class FullNameDataHandler implements AutoCloseable
      */
     String getRandomFullName(boolean needTransliterate)
     {
-        String fullName = String.format("%s %s %s", getLastName(), getFirstName(), getPatronymics());
+        String fullName = String.format("%s %s %s", getLastName(needTransliterate), getFirstName(needTransliterate), getPatronymic(needTransliterate));
 
         return needTransliterate ? Transliterator.transliterate(fullName): fullName;
     }

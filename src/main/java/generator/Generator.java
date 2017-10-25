@@ -35,13 +35,17 @@ public class Generator
      * @param needTransliterate признак необходимости выполнения транслитерации
      * @return заполненный контейнер
      */
-    public Map<Integer, String> generateMap(boolean needTransliterate)
+    public Map<Integer, UserAccount> generateMap(boolean needTransliterate)
     {
-        Map<Integer, String> map = new HashMap<>();
+        Map<Integer, UserAccount> map = new HashMap<>();
 
         try (FullNameDataHandler handler = new FullNameDataHandler())
         {
-            IntStream.range(0, generatorSize).forEach(key -> map.put(key, handler.getRandomFullName(needTransliterate)));
+            IntStream.range(0, generatorSize)
+                    .forEach(key -> map.put(key, new UserAccount(
+                            handler.getFirstName(needTransliterate),
+                            handler.getLastName(needTransliterate),
+                            handler.getPatronymic(needTransliterate))));
         }
         catch (Exception e)
         {
@@ -67,12 +71,12 @@ public class Generator
                 Path path = Paths.get(new File("output.txt").getAbsolutePath());
                 try (BufferedWriter writer = Files.newBufferedWriter(path))
                 {
-                    Map<Integer, String> map = generateMap(needTransliterate);
+                    Map<Integer, UserAccount> map = generateMap(needTransliterate);
                     map.forEach((k, v) ->
                     {
                         try
                         {
-                            writer.write(v);
+                            writer.write(v.toString());
                             writer.newLine();
                         }
                         catch (IOException e)
@@ -120,7 +124,7 @@ public class Generator
         }
         catch (InputMismatchException | UnsupportedOperationException | NumberFormatException e)
         {
-            System.out.println("Wrong data format\n(generatorSize, needTransliterate, outputDirection)");
+            System.out.println("Wrong data format\n (generatorSize, needTransliterate, outputDirection)");
         }
         catch (Exception e)
         {
