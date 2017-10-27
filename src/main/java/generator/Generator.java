@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Map;
@@ -22,7 +23,20 @@ import java.util.stream.IntStream;
  */
 public class Generator
 {
+    private static final String INPUT_FILE_NAME = "full-names.txt";
+    private static final String OUTPUT_FILE_NAME = "output.txt";
+
     private int generatorSize;
+
+    public static String getInputFileName()
+    {
+        return INPUT_FILE_NAME;
+    }
+
+    public static String getOutputFileName()
+    {
+        return OUTPUT_FILE_NAME;
+    }
 
     public Generator(int generatorSize)
     {
@@ -39,8 +53,9 @@ public class Generator
     {
         Map<Integer, UserAccount> map = new HashMap<>();
 
-        try (FullNameDataHandler handler = new FullNameDataHandler())
+        try
         {
+            FullNameDataHandler handler = new FullNameDataHandler();
             IntStream.range(0, generatorSize)
                     .forEach(key -> map.put(key, new UserAccount(
                             handler.getFirstName(needTransliterate),
@@ -56,10 +71,10 @@ public class Generator
     }
 
     /**
-     * Генерация случайных ФИО с выводом в указанный источник
+     * Генерация случайных ФИО указанному получателю
      *
      * @param needTransliterate признак необходимости выполнения транслитерации
-     * @param outputDirection источник вывода информации
+     * @param outputDirection   источник вывода информации
      * @throws UnsupportedOperationException в случае некорректного источника для вывода
      */
     public void generate(boolean needTransliterate, String outputDirection) throws UnsupportedOperationException
@@ -68,7 +83,7 @@ public class Generator
         {
             case "file":
             {
-                Path path = Paths.get(new File("output.txt").getAbsolutePath());
+                Path path = Paths.get(new File(Generator.getOutputFileName()).getAbsolutePath());
                 try (BufferedWriter writer = Files.newBufferedWriter(path))
                 {
                     Map<Integer, UserAccount> map = generateMap(needTransliterate);
@@ -114,8 +129,8 @@ public class Generator
             }
             else
             {
-                int generatorSize = Integer.parseInt(args[0]);
-                boolean needTransliterate = Boolean.parseBoolean(args[1]);
+                int generatorSize = new Integer(args[0]);
+                boolean needTransliterate = new Boolean(args[1]);
                 String outputDirection = args[2];
 
                 Generator generator = new Generator(generatorSize);

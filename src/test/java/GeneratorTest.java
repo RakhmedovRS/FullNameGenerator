@@ -29,9 +29,21 @@ public class GeneratorTest
     }
 
     @Test
-    public void size()
+    public void checkGenerationSize()
     {
         assertEquals(GENERATOR_SIZE, map.size());
+    }
+
+    @Test
+    public void checkDictionariesConsistency()
+    {
+        assertTrue(Transliterator.checkDictionariesConsistency());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void checkTransliteratorHandlingInvalidInput()
+    {
+        Transliterator.transliterate(null);
     }
 
     @Test
@@ -70,8 +82,8 @@ public class GeneratorTest
     public void checkFileCreation()
     {
         generator.generate(true, "file");
-        File file = new File("output.txt");
-        file.deleteOnExit();
+        File file = new File(Generator.getOutputFileName());
+        //file.deleteOnExit();
         assertTrue(file.exists());
     }
 

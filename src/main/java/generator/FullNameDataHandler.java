@@ -13,10 +13,8 @@ import java.util.Random;
  * @$Author$
  * @$Revision$
  */
-class FullNameDataHandler implements AutoCloseable
+class FullNameDataHandler
 {
-    private final static String FULL_NAMES_FILE_NAME = "full-names.txt";
-
     private List<String> firstNames;
     private List<String> lastNames;
     private List<String> patronymics;
@@ -28,7 +26,7 @@ class FullNameDataHandler implements AutoCloseable
         firstNames = new ArrayList<>();
         lastNames = new ArrayList<>();
         patronymics = new ArrayList<>();
-        new Reader(FULL_NAMES_FILE_NAME).fillFullNames(firstNames, lastNames, patronymics);
+        new Reader(Generator.getInputFileName()).fillFullNames(firstNames, lastNames, patronymics);
     }
 
     /**
@@ -95,11 +93,4 @@ class FullNameDataHandler implements AutoCloseable
         return needTransliterate ? Transliterator.transliterate(fullName): fullName;
     }
 
-    @Override
-    public void close() throws Exception
-    {
-        firstNames = null;
-        lastNames = null;
-        patronymics = null;
-    }
 }
